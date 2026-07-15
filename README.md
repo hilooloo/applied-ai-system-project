@@ -1,54 +1,49 @@
-# 🎮 Game Glitch Investigator: The Impossible Guesser
+# Glitch Investigator: Applied AI System
 
-## 🚨 The Situation
+This project is an advanced version of my previous [Module 1 Game Glitch Investigator] project. The original project was a simple number-guessing game designed to teach basic logic and Python scripting. This upgraded version transforms it into an intelligent glitch diagnosis system by integrating **RAG (Retrieval-Augmented Generation)** and **Logging** capabilities.
 
-You asked an AI to build a simple "Number Guessing Game" using Streamlit.
-It wrote the code, ran away, and now the game is unplayable. 
+## 1. Project Summary
+This system automates the process of diagnosing game glitches. It helps users identify problems and provides immediate solutions based on a dedicated knowledge base, making the debugging process faster and more efficient.
 
-- You can't win.
-- The hints lie to you.
-- The secret number seems to have commitment issues.
+## 2. Architecture Overview
+The system flows from User Input, which is validated by a **Guardrail**, to an **Agent** that logs the activity and retrieves the correct fix from the **Knowledge Base**.
 
-## 🛠️ Setup
+```mermaid
+graph TD
+    %% Human Interaction
+    User((User)) -->|Input Guess/Query| UI[Streamlit Interface]
+    
+    %% AI Components
+    UI -->|Process Input| Agent[Glitch Investigator Agent]
+    Agent -->|1. Logging| Logger[Terminal Logger]
+    Agent -->|2. Retrieval| Retriever{Retriever}
+    Retriever -->|Lookup| DB[(Glitch Knowledge Base)]
+    
+    %% Output & Logic
+    Agent -->|3. Evaluation| Logic[Check Guess & Logic]
+    Logic -->|Return| UI
+    
+    %% Testing/Verification
+    UI -.->|Testing| User
 
+## 3. Setup Instructions
+To run this project:
 1. Install dependencies: `pip install -r requirements.txt`
-2. Run the broken app: `python -m streamlit run app.py`
+2. Launch the app: `python -m streamlit run app.py`
 
-## 🕵️‍♂️ Your Mission
+## 4. Sample Interactions
+*   **Input**: "Login freeze" 
+    **Output**: "If the game freezes on login, try reconnecting to the server or restarting the client."
+*   **Input**: "Game crash"
+    **Output**: "Please check your GPU drivers and ensure you have enough system memory."
 
-1. **Play the game.** Open the "Developer Debug Info" tab in the app to see the secret number. Try to win.
-2. **Find the State Bug.** Why does the secret number change every time you click "Submit"? Ask ChatGPT: *"How do I keep a variable from resetting in Streamlit when I click a button?"*
-3. **Fix the Logic.** The hints ("Higher/Lower") are wrong. Fix them.
-4. **Refactor & Test.** - Move the logic into `logic_utils.py`.
-   - Run `pytest` in your terminal.
-   - Keep fixing until all tests pass!
+## 5. Design Decisions
+I chose to use **Streamlit** for the interface because it allows for rapid prototyping. I implemented a **RAG-based search** instead of just hard-coding answers, which allows the system to scale as we add more glitch information.
 
-## 📝 Document Your Experience
+## 6. Testing Summary
+*   **Successes**: The RAG retrieval accurately matches user keywords to the provided solutions.
+*   **Challenges**: Handling very vague user inputs was difficult.
+*   **Learnings**: I learned how to manage logs effectively, which is essential for debugging real-world AI applications.
 
-- [ ] Describe the game's purpose.
-- [ ] Detail which bugs you found.
-- [ ] Explain what fixes you applied.
-
-## 📸 Demo Walkthrough
-
-Describe your fixed game in numbered steps so a reader can follow along without watching a video:
-
-1. User enters a guess of 50
-2. Game returns "Go HIGHER"
-3. User enters a guess of 90 --> "Go LOWER"
-4. Score updates correctly after each guess
-5. Game ends after the correct guess of 85
-
-**Screenshot** *(optional)*: <!-- Insert a screenshot of your fixed, winning game here -->
-
-## 🧪 Test Results
-
-```
-# Paste your pytest output here, e.g.:
-# pytest tests/
-# ========================= X passed in 0.XXs =========================
-```
-
-## 🚀 Stretch Features
-
-- [ ] [If you choose to complete Challenge 4, describe the Enhanced UI changes here — a screenshot is optional]
+## 7. Reflection
+This project taught me that AI is not just about model performance, but about building reliable systems that can handle real-world errors gracefully.

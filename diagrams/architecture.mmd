@@ -1,7 +1,16 @@
-graph LR
-    A[User Input] --> B[Glitch Investigator Agent]
-    B --> C{Retriever}
-    C -->|Search| D[Knowledge Base]
-    D -->|Context| B
-    B --> E[Evaluation & Scoring]
-    E --> F[Output Report]
+graph TD
+    %% Human Interaction
+    User((User)) -->|Input Guess/Query| UI[Streamlit Interface]
+    
+    %% AI Components
+    UI -->|Process Input| Agent[Glitch Investigator Agent]
+    Agent -->|1. Logging| Logger[Terminal Logger]
+    Agent -->|2. Retrieval| Retriever{Retriever}
+    Retriever -->|Lookup| DB[(Glitch Knowledge Base)]
+    
+    %% Output & Logic
+    Agent -->|3. Evaluation| Logic[Check Guess & Logic]
+    Logic -->|Return| UI
+    
+    %% Testing/Verification
+    UI -.->|Testing| User

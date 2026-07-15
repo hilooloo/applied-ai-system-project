@@ -1,3 +1,13 @@
+import logging
+import os
+
+logger = logging.getLogger(__name__)
+
+GLITCH_KNOWLEDGE_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "glitch_knowledge.txt"
+)
+
+
 def get_range_for_difficulty(difficulty: str):
     """Return (low, high) inclusive range for a given difficulty."""
     if difficulty == "Easy":
@@ -74,3 +84,37 @@ def update_score(current_score: int, outcome: str, attempt_number: int):
         return current_score - 5
 
     return current_score
+
+
+def retrieve_glitch_info(query: str):
+    """
+    Very simple retrieval over glitch_knowledge.txt: scores each line by
+    overlapping words with the query and returns the best match.
+
+    Returns the matching "Title: description" line, or None if nothing
+    in the knowledge base overlaps with the query.
+    """
+    if not query:
+        return None
+
+    try:
+        with open(GLITCH_KNOWLEDGE_PATH, "r", encoding="utf-8") as f:
+            lines = [line.strip() for line in f if line.strip()]
+    except OSError as e:
+        logger.error("Could not read glitch knowledge file %s: %s", GLITCH_KNOWLEDGE_PATH, e)
+        return None
+
+    query_words = set(str(query).lower().split())
+    if not query_words:
+        return None
+
+    best_line = None
+    best_score = 0
+    for line in lines:
+        line_words = set(line.lower().replace(":", " ").split())
+        score = len(query_words & line_words)
+        if score > best_score:
+            best_score = score
+            best_line = line
+
+    return best_line

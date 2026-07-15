@@ -1,0 +1,5 @@
+Login freeze: If the game freezes on login, try reconnecting to the server or restarting the client.
+Floating bug: If your character is stuck floating in the air, try jumping and then crouching to reset physics.
+Texture flickering: If textures flicker or glitch visually, lower your graphics settings and update your GPU drivers.
+Sound cutout: If audio cuts out or stutters, restart the game's audio driver or check your sound device settings.
+Score not updating: If your score seems stuck or wrong, start a new game to reset session state.

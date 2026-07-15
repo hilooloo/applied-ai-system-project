@@ -1,3 +1,4 @@
+import logging
 import random
 import streamlit as st
 
@@ -6,7 +7,14 @@ from logic_utils import (
     parse_guess,
     check_guess,
     update_score,
+    retrieve_glitch_info,
 )
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+)
+logger = logging.getLogger(__name__)
 
 st.set_page_config(page_title="Glitchy Guesser", page_icon="🎮")
 
@@ -90,12 +98,21 @@ if st.session_state.status != "playing":
 
 if submit:
     st.session_state.attempts += 1
+    logger.info("Guess submitted (attempt %d): %r", st.session_state.attempts, raw_guess)
 
-    ok, guess_int, err = parse_guess(raw_guess)
+    try:
+        ok, guess_int, err = parse_guess(raw_guess)
+    except Exception:
+        logger.exception("Error parsing guess input: %r", raw_guess)
+        ok, guess_int, err = False, None, "Sorry, that guess couldn't be read. Please try again."
 
     if not ok:
         st.session_state.history.append(raw_guess)
         st.error(err)
+
+        glitch_tip = retrieve_glitch_info(raw_guess)
+        if glitch_tip:
+            st.info(f"💡 Possible known issue: {glitch_tip}")
     else:
         st.session_state.history.append(guess_int)
 
@@ -104,16 +121,27 @@ if submit:
         else:
             secret = st.session_state.secret
 
-        outcome, message = check_guess(guess_int, secret)
+        try:
+            outcome, message = check_guess(guess_int, secret)
+        except Exception:
+            logger.exception("Error comparing guess %r to secret", guess_int)
+            outcome, message = "Too Low", "Something went wrong checking your guess. Try again."
 
         if show_hint:
             st.warning(message)
 
-        st.session_state.score = update_score(
-            current_score=st.session_state.score,
-            outcome=outcome,
-            attempt_number=st.session_state.attempts,
-        )
+        glitch_tip = retrieve_glitch_info(raw_guess) or retrieve_glitch_info(message)
+        if glitch_tip:
+            st.info(f"💡 Related tip: {glitch_tip}")
+
+        try:
+            st.session_state.score = update_score(
+                current_score=st.session_state.score,
+                outcome=outcome,
+                attempt_number=st.session_state.attempts,
+            )
+        except Exception:
+            logger.exception("Error updating score for outcome %r", outcome)
 
         if outcome == "Win":
             st.balloons()

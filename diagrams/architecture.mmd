@@ -1,0 +1,7 @@
+graph LR
+    A[User Input] --> B[Glitch Investigator Agent]
+    B --> C{Retriever}
+    C -->|Search| D[Knowledge Base]
+    D -->|Context| B
+    B --> E[Evaluation & Scoring]
+    E --> F[Output Report]

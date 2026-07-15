@@ -25,6 +25,7 @@ graph TD
     
     %% Testing/Verification
     UI -.->|Testing| User
+```
 
 ## 3. Setup Instructions
 To run this project:
@@ -44,6 +45,18 @@ I chose to use **Streamlit** for the interface because it allows for rapid proto
 *   **Successes**: The RAG retrieval accurately matches user keywords to the provided solutions.
 *   **Challenges**: Handling very vague user inputs was difficult.
 *   **Learnings**: I learned how to manage logs effectively, which is essential for debugging real-world AI applications.
+### Test Results Summary
+The system was evaluated using 5 specific scenarios to ensure reliability and error handling.
+
+| Test Input | Evaluation Criteria | Result |
+| :--- | :--- | :--- |
+| "Login freeze" | Accurate search & solution | Pass |
+| "Game crash" | Accurate search & solution | Pass |
+| "" (Empty) | Graceful error handling | Pass |
+| "Invalid command" | Friendly error message | Pass |
+| "Performance issues" | Accurate search & solution | Pass |
+
+**Summary:** 5 out of 5 tests passed. The system effectively uses logging for tracking inputs and guardrails to manage unexpected or empty inputs without crashing.
 
 ## 7. Reflection
 This project taught me that AI is not just about model performance, but about building reliable systems that can handle real-world errors gracefully.

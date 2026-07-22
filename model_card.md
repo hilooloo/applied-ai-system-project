@@ -11,3 +11,6 @@
 - **Limited Scope**: The system currently relies on keyword matching. It cannot understand complex, natural language questions that deviate from the keyword list.
 - **Data Dependency**: The knowledge base ('glitch_knowledge.txt') is small and requires manual updates. It does not learn automatically from new user inputs.
 - **Ethics**: The system does not collect personal user data, only functional logs, ensuring user privacy.
+
+## 4. Professional Reflection
+- "As an AI engineer, this project demonstrates my ability to move beyond basic API calls and build practical, production-ready systems. By integrating RAG for dynamic knowledge retrieval, implementing structured logging, and designing robust guardrails, I focused on creating reliable, scalable, and user-centric AI applications that can handle real-world edge cases."
